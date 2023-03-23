@@ -33,7 +33,7 @@ namespace TodoApi.Controllers
 
         // GET: api/TodoItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
+        public async Task<ActionResult<TodoItem>> GetTodoItem(String id)
         {
           if (_context.TodoItems == null)
           {
@@ -52,7 +52,7 @@ namespace TodoApi.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem(string id, TodoItem todoItem)
         {
             if (id != todoItem.Id)
             {
@@ -83,12 +83,23 @@ namespace TodoApi.Controllers
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItemInput todoItemInput)
         {
           if (_context.TodoItems == null)
           {
               return Problem("Entity set 'TodoContext.TodoItems'  is null.");
           }
+
+          var todoItem = new TodoItem() {
+            // auto generated
+            Id = Guid.NewGuid().ToString(),
+            Name = todoItemInput.Name,
+            Content = todoItemInput.Content,
+            IsComplete = false,
+            Created = DateTime.Now
+          };
+
+
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
@@ -97,7 +108,7 @@ namespace TodoApi.Controllers
 
         // DELETE: api/TodoItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<IActionResult> DeleteTodoItem(String id)
         {
             if (_context.TodoItems == null)
             {
@@ -115,7 +126,7 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
-        private bool TodoItemExists(long id)
+        private bool TodoItemExists(String id)
         {
             return (_context.TodoItems?.Any(e => e.Id == id)).GetValueOrDefault();
         }
