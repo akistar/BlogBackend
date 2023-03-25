@@ -4,10 +4,19 @@ namespace TodoApi.Models;
 
 public class TodoContext : DbContext
 {
-    public TodoContext(DbContextOptions<TodoContext> options)
-        : base(options)
+    protected readonly IConfiguration Configuration;
+
+    public TodoContext(IConfiguration configuration)
     {
+        Configuration = configuration;
     }
 
-    public DbSet<TodoItem> TodoItems { get; set; } = null!;
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite(Configuration.GetConnectionString("TodoContextDb"));
+
+    }
+
+    public DbSet<TodoItem> TodoItems { get; set; }
+
 }

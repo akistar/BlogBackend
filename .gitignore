@@ -22,3 +22,8 @@ msbuild.err
 msbuild.wrn
 
 .fake
+
+# LocalDb
+
+**/LocalDatabase*
+**/Migrations/
