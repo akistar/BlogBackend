@@ -11,7 +11,6 @@ RUN dotnet publish -c Release -o /app -r linux-musl-arm64 --self-contained false
 FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine3.17-arm64v8
 WORKDIR /app
 COPY --from=build /app .
-ENV ASPNETCORE_URLS=http://*:5000
 EXPOSE 5000
 ENTRYPOINT [ "./TodoApi" ]
 

@@ -9,7 +9,13 @@ builder.Services.AddControllers();
 var configuration = builder.Configuration;
 
 var dbConnectionString = configuration.GetConnectionString("TodoContextDb");
-var password = configuration["Dbpassword"];
+
+var envPassword = Environment.GetEnvironmentVariable("Dbpassword");
+
+var configPassword = configuration["Dbpassword"];
+System.Console.WriteLine("env "+ envPassword );
+System.Console.WriteLine("config "+ configPassword );
+var password = envPassword ?? configPassword;
 var dbConnectionStringWithPassword = dbConnectionString.Replace("password=;", $"password={password};");
 
 builder.Services.AddDbContext<TodoContext>(opt => opt.UseMySql(
